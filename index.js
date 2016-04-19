@@ -20,7 +20,8 @@ module.exports = {
 
   contentFor: function(type) {
     if (type === 'head') {
-      return '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">';
+      return '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">' +
+        '<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">';
     }
   },
 
@@ -102,7 +103,10 @@ module.exports = {
       'components/dialog/dialog-theme.scss'
     ];
 
-    var angularScssFiles = new Funnel('node_modules/angular-material-source/src', {
+    var pathBase = this.project.addonPackages['ember-paper'].path;
+    var angularMaterialPath =  'node_modules/angular-material-source/src';
+
+    var angularScssFiles = new Funnel(path.join(pathBase,angularMaterialPath), {
       files: scssFiles,
       destDir: 'angular-material',
       annotation: 'AngularScssFunnel'
@@ -120,5 +124,10 @@ module.exports = {
       tree = autoprefixer(tree, { browsers: ['last 2 versions'] });
     }
     return tree;
+  },
+
+  // TODO: Remove once ember-paper is stable.
+  isDevelopingAddon: function() {
+    return true;
   }
 };

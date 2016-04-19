@@ -6,12 +6,15 @@ export default BaseFocusable.extend({
   tagName: 'md-radio-group',
   tabindex: 0,
 
+  /* BaseFocusable Overrides */
+  focusOnlyOnKey: true,
+
   constants: inject.service(),
 
   // Lifecycle hooks
   didInitAttrs() {
     this._super(...arguments);
-    Ember.assert('{{paper-radio-group}} requires an `onchange` function', this.get('onchange') && typeof this.get('onchange') === 'function');
+    Ember.assert('{{paper-radio-group}} requires an `onChange` action', !!this.get('onChange'));
   },
 
   childRadios: computed(function() {
@@ -58,12 +61,12 @@ export default BaseFocusable.extend({
 
     let childRadio = this.get('enabledChildRadios').objectAt(index);
     childRadio.set('focused', true);
-    this.get('onchange')(childRadio.get('value'));
+    this.sendAction('onChange', childRadio.get('value'));
   },
 
   actions: {
-    onchange(value) {
-      this.get('onchange')(value);
+    onChange(value) {
+      this.sendAction('onChange', value);
     }
   }
 });

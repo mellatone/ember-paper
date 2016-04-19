@@ -6,14 +6,13 @@ const {
   String: { htmlSafe },
   RSVP: { Promise },
   computed,
-  inject: { service },
+  inject,
   run,
-  K,
-  typeOf
+  K
 } = Ember;
 
 export default Mixin.create({
-  constants: service(),
+  constants: inject.service(),
 
   attributeBindings: ['translateStyle:style'],
   classNameBindings: ['transformIn:md-transition-in'],
@@ -58,8 +57,10 @@ export default Mixin.create({
             this.onTranslateFromEnd();
           }
         });
-        this.set('transformStyleApply', 'main');
-        this.set('transformIn', true);
+        if (!this.get('isDestroying') && !this.get('isDestroyed')) {
+          this.set('transformStyleApply', 'main');
+          this.set('transformIn', true);
+        }
       });
     });
   },

@@ -1,7 +1,7 @@
 {{#paper-toolbar}}
   <div class="md-toolbar-tools">
     {{#paper-sidenav-toggle target="sidenav"}}
-      {{#paper-button icon-button=true class="hide-gt-xs"}}{{paper-icon "menu"}}{{/paper-button}}
+      {{#paper-button iconButton=true class="hide-gt-xs"}}{{paper-icon "menu"}}{{/paper-button}}
     {{/paper-sidenav-toggle}}
     <span class="md-breadcrumb-page">Autocomplete</span>
   </div>
@@ -28,7 +28,7 @@
         Nothing selected...
     {{/if}}
   </p>
-  {{#paper-checkbox checked=firstDisabled onchange=(action (mut firstDisabled))}}Disable input{{/paper-checkbox}}
+  {{#paper-checkbox value=firstDisabled onChange=(action (mut firstDisabled))}}Disable input{{/paper-checkbox}}
 
 
 

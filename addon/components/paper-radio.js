@@ -19,10 +19,13 @@ export default BaseFocusable.extend(RippleMixin, ColorMixin, {
   dimBackground: false,
   fitRipple: true,
 
+  /* BaseFocusable Overrides */
+  focusOnlyOnKey: true,
+
   // Lifecycle hooks
   didInitAttrs() {
     this._super(...arguments);
-    assert('{{paper-radio}} requires an `onchange` function', this.get('onchange') && typeof this.get('onchange') === 'function');
+    assert('{{paper-radio}} requires an `onChange` action', !!this.get('onChange'));
 
     if (this.get('parentGroup')) {
       this.get('parentGroup').register(this);
@@ -43,9 +46,9 @@ export default BaseFocusable.extend(RippleMixin, ColorMixin, {
   click() {
     if (!this.get('disabled')) {
       if (this.get('toggle')) {
-        this.get('onchange')(this.get('checked') ? null : this.get('value'));
+        this.sendAction('onChange', this.get('checked') ? null : this.get('value'));
       } else {
-        this.get('onchange')(this.get('value'));
+        this.sendAction('onChange', this.get('value'));
       }
     }
   }

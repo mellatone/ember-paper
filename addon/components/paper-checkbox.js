@@ -8,7 +8,7 @@ const { inject, assert } = Ember;
 export default BaseFocusable.extend(RippleMixin, ProxiableMixin, ColorMixin, {
   tagName: 'md-checkbox',
   classNames: ['md-checkbox', 'md-default-theme'],
-  classNameBindings: ['checked:md-checked'],
+  classNameBindings: ['value:md-checked'],
 
   /* Ripple Overrides */
   rippleContainerSelector: '.md-container',
@@ -16,28 +16,32 @@ export default BaseFocusable.extend(RippleMixin, ProxiableMixin, ColorMixin, {
   dimBackground: false,
   fitRipple: true,
 
+  /* BaseFocusable Overrides */
+  focusOnlyOnKey: true,
+
   constants: inject.service(),
 
-  checked: false,
+  value: false,
 
   didInitAttrs() {
     this._super(...arguments);
-    assert('{{paper-checkbox}} requires an `onchange` function', this.get('onchange') && typeof this.get('onchange') === 'function');
+    assert('{{paper-checkbox}} requires an `onChange` action', !!this.get('onChange'));
   },
 
   click() {
     if (!this.get('disabled')) {
-      this.get('onchange')(!this.get('checked'));
+      this.sendAction('onChange', !this.get('value'));
     }
   },
 
   keyPress(ev) {
-    if (ev.which === this.get('constants.KEYCODE.SPACE')) {
+    if (ev.which === this.get('constants.KEYCODE.SPACE') || ev.which === this.get('constants.KEYCODE.ENTER')) {
+      ev.preventDefault();
       this.click();
     }
   },
 
   processProxy() {
-    this.get('onchange')(!this.get('checked'));
+    this.sendAction('onChange', !this.get('value'));
   }
 });

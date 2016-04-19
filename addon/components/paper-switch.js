@@ -9,14 +9,15 @@ const {
   run,
   String: {
     htmlSafe
-  }
+  },
+  inject
 } = Ember;
 /* global Hammer */
 
 export default BaseFocusable.extend(RippleMixin, ProxiableMixin, ColorMixin, {
   tagName: 'md-switch',
   classNames: ['paper-switch', 'md-default-theme'],
-  classNameBindings: ['checked:md-checked', 'dragging:md-dragging'],
+  classNameBindings: ['value:md-checked', 'dragging:md-dragging'],
   toggle: true,
 
   /* Ripple Overrides */
@@ -25,19 +26,19 @@ export default BaseFocusable.extend(RippleMixin, ProxiableMixin, ColorMixin, {
   dimBackground: false,
   fitRipple: true,
 
-  checked: false,
+  value: false,
   disabled: false,
   dragging: false,
+
+  constants: inject.service(),
 
   thumbContainerStyle: computed('dragging', 'dragAmount', function() {
     if (!this.get('dragging')) {
       return htmlSafe('');
     }
 
-    let percent = this.get('dragAmount');
-    let translate = Math.max(0, Math.min(1, percent));
-    let transformProp = `translate3d(${100 * translate}%, 0, 0)`;
-
+    let translate = Math.max(0, Math.min(100, this.get('dragAmount') * 100));
+    let transformProp = `translate3d(${translate}%, 0, 0)`;
     return htmlSafe(`transform: ${transformProp};-webkit-transform: ${transformProp}`);
   }),
 
@@ -52,7 +53,7 @@ export default BaseFocusable.extend(RippleMixin, ProxiableMixin, ColorMixin, {
 
   didInitAttrs() {
     this._super(...arguments);
-    assert('{{paper-switch}} requires an `onchange` function', this.get('onchange') && typeof this.get('onchange') === 'function');
+    assert('{{paper-switch}} requires an `onChange` action', !!this.get('onChange'));
   },
 
   willDestroyElement() {
@@ -92,46 +93,44 @@ export default BaseFocusable.extend(RippleMixin, ProxiableMixin, ColorMixin, {
   _teardownSwitch() {
     if (this._switchContainerHammer) {
       this._switchContainerHammer.destroy();
-    }
-
-    if (this._switchHammer) {
       this._switchHammer.destroy();
     }
   },
 
   _dragStart() {
+    this.set('dragAmount', +this.get('value'));
     this.set('dragging', true);
   },
 
   _drag(event) {
     if (!this.get('disabled')) {
-      // Get the amount the switch has been dragged
-      let percent = event.deltaX / this.get('switchWidth');
-      percent = this.get('checked') ? 1 + percent : percent;
-      this.set('dragAmount', percent);
+      // Set the amount the switch has been dragged
+      this.set('dragAmount', +this.get('value') + event.deltaX / this.get('switchWidth'));
     }
   },
 
-  _dragEnd(ev) {
+  _dragEnd() {
     if (!this.get('disabled')) {
-      let checked = this.get('checked');
+      let value = this.get('value');
       let dragAmount = this.get('dragAmount');
 
-      if ((!this.get('dragging')) ||
-           (checked && dragAmount < 0.5) ||
-           (!checked && dragAmount > 0.5)) {
-        this.get('onchange')(!checked);
-        console.log('paper-switch', !checked);
+      if (!this.get('dragging') || (value && dragAmount < 0.5) || (!value && dragAmount > 0.5)) {
+        this.sendAction('onChange', !value);
       }
       this.set('dragging', false);
       this.set('dragAmount', null);
-      ev.srcEvent.stopImmediatePropagation();
-      ev.srcEvent.stopPropagation();
+    }
+  },
+
+  keyPress(ev) {
+    if (ev.which === this.get('constants.KEYCODE.SPACE') || ev.which === this.get('constants.KEYCODE.ENTER')) {
+      ev.preventDefault();
+      this._dragEnd();
     }
   },
 
   processProxy() {
-    this.get('onchange')(!this.get('checked'));
+    this.sendAction('onChange', !this.get('value'));
   }
 
 });
