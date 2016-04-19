@@ -1,11 +1,11 @@
 import Ember from 'ember';
-const { $, inject, run } = Ember;
+const { $, inject, run, Component } = Ember;
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: 'md-sidenav',
 
   constants: inject.service(),
-  paperSidenav: inject.service('paper-sidenav'),
+  paperSidenav: inject.service(),
 
   setupToggleListener() {
     this.get('paperSidenav').on('toggle', this, 'onToggle');
