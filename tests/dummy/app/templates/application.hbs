@@ -24,11 +24,12 @@
             {{#submenu-item active=(is-active "demo.chips" currentRouteName) onClick=(transition-to "demo.chips")}}Chips{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.dialog" currentRouteName) onClick=(transition-to "demo.dialog")}}Dialog{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.divider" currentRouteName) onClick=(transition-to "demo.divider")}}Divider{{/submenu-item}}
-            {{#submenu-item active=(is-active "demo.grid-list" currentRouteName) onClick=(transition-to "demo.grid-list")}}Grid List {{paper-icon "warning" title="Not updated yet."}}{{/submenu-item}}
+            {{#submenu-item active=(is-active "demo.grid-list" currentRouteName) onClick=(transition-to "demo.grid-list")}}Grid List{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.icons" currentRouteName) onClick=(transition-to "demo.icons")}}Icons{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.input" currentRouteName) onClick=(transition-to "demo.input")}}Input{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.list" currentRouteName) onClick=(transition-to "demo.list")}}List{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.menu" currentRouteName) onClick=(transition-to "demo.menu")}}Menu{{/submenu-item}}
+            {{#submenu-item active=(is-active "demo.nav-bar.index" currentRouteName) onClick=(transition-to "demo.nav-bar")}}Nav Bar{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.progress-circular" currentRouteName) onClick=(transition-to "demo.progress-circular")}}Progress Circular{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.progress-linear" currentRouteName) onClick=(transition-to "demo.progress-linear")}}Progress Linear{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.radio" currentRouteName) onClick=(transition-to "demo.radio")}}Radio{{/submenu-item}}
@@ -37,8 +38,10 @@
             {{#submenu-item active=(is-active "demo.slider" currentRouteName) onClick=(transition-to "demo.slider")}}Slider{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.tabs" currentRouteName) onClick=(transition-to "demo.tabs")}}Tabs{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.switch" currentRouteName) onClick=(transition-to "demo.switch")}}Switch{{/submenu-item}}
+            {{#submenu-item active=(is-active "demo.toast" currentRouteName) onClick=(transition-to "demo.toast")}}Toast{{/submenu-item}}
             {{#submenu-item active=(is-active "demo.toolbar" currentRouteName) onClick=(transition-to "demo.toolbar")}}Toolbar{{/submenu-item}}
-             {{#submenu-item active=(is-active "demo.virtual-repeat" currentRouteName) onClick=(transition-to "demo.virtual-repeat")}}Virtual Repeat{{/submenu-item}}
+            {{#submenu-item active=(is-active "demo.tooltip" currentRouteName) onClick=(transition-to "demo.tooltip")}}Tooltip{{/submenu-item}}
+            {{#submenu-item active=(is-active "demo.virtual-repeat" currentRouteName) onClick=(transition-to "demo.virtual-repeat")}}Virtual Repeat{{/submenu-item}}
           {{/liquid-if}}
         </div>
         {{#menu-item active=(is-active "forms" currentRouteName) onClick=(transition-to "forms")}}Forms{{/menu-item}}
@@ -56,12 +59,15 @@
         </div>
 
         {{#menu-item active=(is-active "cookbook" currentRouteName) onClick=(transition-to "cookbook")}}Cookbook{{/menu-item}}
+        {{#menu-item active=(is-active "addons" currentRouteName) onClick=(transition-to "addons")}}Addons{{/menu-item}}
       {{/paper-list}}
 
     {{/paper-content}}
   {{/paper-sidenav}}
 
-  <div class="flex layout-column" tabindex="-1" role="main">
+  <div id="main" class="flex layout-column" tabindex="-1" role="main">
     {{outlet}}
   </div>
 {{/paper-sidenav-container}}
+
+{{paper-toaster parent="#main"}}
